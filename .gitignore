@@ -1,3 +1,10 @@
+data/
+CN/cn_speech_commands/
+CN/cn_speech_commands.tar.gz
+EN/fluent_speech_commands_dataset/
+EN/fluent_speech_commands.zip
+*.done
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
