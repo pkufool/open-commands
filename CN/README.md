@@ -1,12 +1,58 @@
 # 中文语音命令词
 
+中文命令词测试集包含 93 各命令词，其中`你好问问`从 [Mobvoi Hotwords](https://openslr.org/87/) 测试集中随机提取（共500条）,
+`小云小云` 从[ModelScope](https://www.modelscope.cn/datasets/modelscope/speech_kws_mobile_xiaoyun_pos_testsets/summary)获取（共450条）。
+其余91条，每条约50句，主要为内部测试集和开发者贡献的测试样例。具体的统计可以看下面的[统计数据](#统计数据)。
 
 
+## 使用方法
 
+我们准备了下载和提取特征的脚本，如下：
 
+### 下载
 
+```bash
+# from modelscope
+bash scripts/prepare.sh --stage 1 --stop-stage 1
 
+# from github
+bash scripts/prepare.sh --stage 2 --stop-stage 2
+```
 
+### 特征提取（lhotse格式)
+
+```
+# 需要先安装 lhotse
+# pip install lhotse
+bash scripts/prepare.sh --stage 5 --stop-stage 5
+```
+
+做完这些之后，你应该能看到如下目录和文件：
+
+```
+.
+├── CN
+│   ├── cn_speech_commands
+│   │   ├── manifest
+│   │   └── wavs
+│   ├── cn_speech_commands.tar.gz
+│   ├── large
+│   │   ├── commands.txt
+│   │   ├── segments
+│   │   ├── text
+│   │   └── wav.scp
+│   └── small
+│       ├── commands.txt
+│       ├── segments
+│       ├── text
+│       └── wav.scp
+└─ data
+    └── fbank
+        ├── cn_speech_commands_cuts_large.jsonl.gz
+        ├── cn_speech_commands_cuts_small.jsonl.gz
+        ├── cn_speech_commands_feats_large
+        └── cn_speech_commands_feats_small
+```
 
 ## 统计数据
 

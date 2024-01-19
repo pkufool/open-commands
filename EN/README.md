@@ -1,13 +1,81 @@
 # English speech commands
 
+The English speech commands dataset is the **fluent speech commands** (has 248 speech commands),
+you can find more details [here](https://fluent.ai/fluent-speech-commands-a-dataset-for-spoken-language-understanding-research/).
+
+In the original test set, there are two many commands and some commands are the prefix or suffix or other commands, which makes it
+hassle to tune the performance during development. So I extract 20 shorter commands and guarantee there is no command be the prefix
+of suffix of any other commands. You can see the details in the [Statistics](#statistics) section (the large test set is the original test set, it
+contains the small test set).
 
 
+## Usage
 
+We have some scripts to download the data and compute features (in lhotse format):
+
+### Download
+
+```bash
+# from modelscope
+bash scripts/prepare.sh --stage 3 --stop-stage 3
+
+# from github
+bash scripts/prepare.sh --stage 4 --stop-stage 4
+```
+
+### Feature extraction
+
+```
+# You need to install lhotse first
+# pip install lhotse
+bash scripts/prepare.sh --stage 6 --stop-stage 6
+```
+
+Finishing all above, you can find the directories and files like:
+
+```
+.
+├── EN
+│   ├── fluent_speech_commands_dataset
+│   │   ├── data
+│   │   ├── Fluent Speech Commands Public License.pdf
+│   │   ├── readme.md
+│   │   └── wavs
+│   ├── fluent_speech_commands.zip
+│   ├── large
+│   │   ├── commands.txt
+│   │   ├── segments
+│   │   ├── text
+│   │   └── wav.scp
+│   ├── small
+│   │   ├── commands.txt
+│   │   ├── segments
+│   │   ├── text
+│   │   └── wav.scp
+│   ├── train
+│   │   ├── segments
+│   │   ├── text
+│   │   └── wav.scp
+│   └── valid
+│       ├── segments
+│       ├── text
+│       └── wav.scp
+└── data
+    └── fbank
+        ├── fluent_speech_commands_cuts_large.jsonl.gz
+        ├── fluent_speech_commands_cuts_small.jsonl.gz
+        ├── fluent_speech_commands_cuts_train.jsonl.gz
+        ├── fluent_speech_commands_cuts_valid.jsonl.gz
+        ├── fluent_speech_commands_feats_large
+        ├── fluent_speech_commands_feats_small
+        ├── fluent_speech_commands_feats_train
+        └── fluent_speech_commands_feats_valid
+```
 
 
 ## Statistics
 
-### small subset
+### small test set
 
 | Phrase | Number of audios |
 |--------|------------------|
@@ -32,7 +100,7 @@
 |  VOLUME MUTE | 16 |
 |  VOLUME UP | 18 |
 
-### large subset
+### large test set
 
 | Phrase | Number of audios |
 |--------|------------------|
