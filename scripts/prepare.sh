@@ -24,23 +24,23 @@ if [ $stage -le 1 ] && [ $stop_stage -ge 1 ]; then
   if [ ! -e ${CN_dir}/.cn_speech_commands.done ]; then 
     if [ $mirror -eq "modelscope" ]; then
       log "Downloading from modelscope."
-      wget -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=cn_speech_commands.tar.gz" -O ${CN_dir}/cn_speech_commands.tar.gz
-      wget -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=nihaowenwen.tar.gz" -O ${CN_dir}/nihaowenwen.tar.gz
-      wget -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=xiaoyun.tar.gz" -O ${CN_dir}/xiaoyun.tar.gz
+      wget -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=cn_speech_commands.tar.bz" -O ${CN_dir}/cn_speech_commands.tar.bz
+      wget -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=nihaowenwen.tar.bz" -O ${CN_dir}/nihaowenwen.tar.bz
+      wget -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=xiaoyun.tar.bz" -O ${CN_dir}/xiaoyun.tar.bz
     elif [ $mirror -eq "github" ]; then
       log "Downloading from github."
-      wget -v https://github.com/pkufool/open-commands/releases/download/original_data/cn_speech_commands.tar.gz -O ${CN_dir}/cn_speech_commands.tar.gz
-      wget -v https://github.com/pkufool/open-commands/releases/download/original_data/nihaowenwen.tar.gz -O ${CN_dir}/nihaowenwen.tar.gz
-      wget -v https://github.com/pkufool/open-commands/releases/download/original_data/xiaoyun.tar.gz -O ${CN_dir}/xiaoyun.tar.gz
+      wget -v https://github.com/pkufool/open-commands/releases/download/original_data/cn_speech_commands.tar.bz -O ${CN_dir}/cn_speech_commands.tar.bz
+      wget -v https://github.com/pkufool/open-commands/releases/download/original_data/nihaowenwen.tar.bz -O ${CN_dir}/nihaowenwen.tar.bz
+      wget -v https://github.com/pkufool/open-commands/releases/download/original_data/xiaoyun.tar.bz -O ${CN_dir}/xiaoyun.tar.bz
     else
       log "Mirror : $mirror not support."
       exit -1
     fi
     log "Extracting CN commands."
     pushd ${CN_dir}
-    tar xf cn_speech_commands.tar.gz
-    tar xf nihaowenwen.tar.gz
-    tar xf xiaoyun.tar.gz
+    tar xf cn_speech_commands.tar.bz
+    tar xf nihaowenwen.tar.bz
+    tar xf xiaoyun.tar.bz
     touch .cn_speech_commands.done
     popd
   else
