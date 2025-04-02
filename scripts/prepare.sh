@@ -22,19 +22,19 @@ log() {
 if [ $stage -le 1 ] && [ $stop_stage -ge 1 ]; then
   log "Stage 1: Download CN commands."
   if [ ! -e ${CN_dir}/.cn_speech_commands.done ]; then 
-    if [ $mirror -eq "modelscope" ]; then
+    if [ $mirror = "modelscope" ]; then
       log "Downloading from modelscope."
-      wget -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=cn_speech_commands.tar.bz" -O ${CN_dir}/cn_speech_commands.tar.bz
-      wget -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=nihaowenwen.tar.bz" -O ${CN_dir}/nihaowenwen.tar.bz
-      wget -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=xiaoyun.tar.bz" -O ${CN_dir}/xiaoyun.tar.bz
-    elif [ $mirror -eq "github" ]; then
+      wget -t 0 -c -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=cn_speech_commands.tar.bz" -O ${CN_dir}/cn_speech_commands.tar.bz
+      wget -t 0 -c -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=nihaowenwen.tar.bz" -O ${CN_dir}/nihaowenwen.tar.bz
+      wget -t 0 -c -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=xiaoyun.tar.bz" -O ${CN_dir}/xiaoyun.tar.bz
+    elif [ $mirror = "github" ]; then
       log "Downloading from github."
-      wget -v https://github.com/pkufool/open-commands/releases/download/original_data/cn_speech_commands.tar.bz -O ${CN_dir}/cn_speech_commands.tar.bz
-      wget -v https://github.com/pkufool/open-commands/releases/download/original_data/nihaowenwen.tar.bz -O ${CN_dir}/nihaowenwen.tar.bz
-      wget -v https://github.com/pkufool/open-commands/releases/download/original_data/xiaoyun.tar.bz -O ${CN_dir}/xiaoyun.tar.bz
+      wget -t 0 -c -v https://github.com/pkufool/open-commands/releases/download/original_data/cn_speech_commands.tar.bz -O ${CN_dir}/cn_speech_commands.tar.bz
+      wget -t 0 -c -v https://github.com/pkufool/open-commands/releases/download/original_data/nihaowenwen.tar.bz -O ${CN_dir}/nihaowenwen.tar.bz
+      wget -t 0 -c -v https://github.com/pkufool/open-commands/releases/download/original_data/xiaoyun.tar.bz -O ${CN_dir}/xiaoyun.tar.bz
     else
       log "Mirror : $mirror not support."
-      exit -1
+      exit 1
     fi
     log "Extracting CN commands."
     pushd ${CN_dir}
@@ -51,15 +51,15 @@ fi
 if [ $stage -le 2 ] && [ $stop_stage -ge 2 ]; then
   log "Stage 2: Download EN commands."
   if [ ! -e ${EN_dir}/.fluent_speech_commands.done ]; then 
-    if [ $mirror -eq "modelscope" ]; then
+    if [ $mirror = "modelscope" ]; then
       log "Downloading from modelscope."
-      wget -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=fluent_speech_commands.zip" -O ${EN_dir}/fluent_speech_commands.zip
-    elif [ $mirror -eq "github" ]; then
+      wget -t 0 -c -v "https://www.modelscope.cn/api/v1/datasets/pkufool/open-commands/repo?Revision=master&FilePath=fluent_speech_commands.zip" -O ${EN_dir}/fluent_speech_commands.zip
+    elif [ $mirror = "github" ]; then
       log "Downloading from github."
-      wget -v https://github.com/pkufool/open-commands/releases/download/original_data/fluent_speech_commands.zip -O ${EN_dir}/fluent_speech_commands.zip
+      wget -t 0 -c -v https://github.com/pkufool/open-commands/releases/download/original_data/fluent_speech_commands.zip -O ${EN_dir}/fluent_speech_commands.zip
     else
       log "Mirror : $mirror not support."
-      exit -1
+      exit 1
     fi
     log "unzip fluent_speech_commands.zip"
     pushd ${EN_dir}
@@ -93,6 +93,7 @@ if [ $stage -le 4 ] && [ $stop_stage -ge 4 ]; then
   log "Stage 4: Prepare and compute feature for nihaowenwen."
   for part in test dev train; do
     if [ ! -e ${CN_dir}/nihaowenwen/.${part}.done ]; then
+      mkdir -p ${CN_dir}/nihaowenwen/${part}
       cat ${CN_dir}/nihaowenwen/utt_ids.${part} | awk '{print $1"\t你好问问"}' > ${CN_dir}/nihaowenwen/${part}/text
       cat ${CN_dir}/nihaowenwen/utt_ids.${part} | awk '{print $1"\tCN/nihaowenwen/wavs/"$1".wav"}' > ${CN_dir}/nihaowenwen/${part}/wav.scp
       cat ${CN_dir}/nihaowenwen/utt_ids.${part} | awk '{print $1"\t"$1"\t0\t-1"}' > ${CN_dir}/nihaowenwen/${part}/segments
@@ -114,6 +115,7 @@ if [ $stage -le 5 ] && [ $stop_stage -ge 5 ]; then
   log "Stage 5: Prepare and compute feature for xiaoyun."
   for part in clean noisy; do
     if [ ! -e ${CN_dir}/xiaoyun/.${part}.done ]; then
+      mkdir -p ${CN_dir}/xiaoyun/${part}
       cat ${CN_dir}/xiaoyun/utt_id.${part} | awk '{print $1"\t小云小云"}' > ${CN_dir}/xiaoyun/${part}/text
       cat ${CN_dir}/xiaoyun/utt_id.${part} | awk '{print $1"\tCN/xiaoyun/wavs/"$1".wav"}' > ${CN_dir}/xiaoyun/${part}/wav.scp
       cat ${CN_dir}/xiaoyun/utt_id.${part} | awk '{print $1"\t"$1"\t0\t-1"}' > ${CN_dir}/xiaoyun/${part}/segments
